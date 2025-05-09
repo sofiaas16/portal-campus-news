@@ -1,4 +1,3 @@
-
 class CampusCategoryFilters extends HTMLElement {
     constructor() {
       super()
@@ -17,6 +16,19 @@ class CampusCategoryFilters extends HTMLElement {
             margin: 0 0 15px 0;
             font-size: 18px;
             color: #264653;
+            position: relative;
+            padding-bottom: 8px;
+          }
+          
+          h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #2a9d8f;
+            border-radius: 3px;
           }
           
           .filters {
@@ -28,20 +40,46 @@ class CampusCategoryFilters extends HTMLElement {
           button {
             padding: 8px 12px;
             border: none;
-            border-radius: 4px;
+            border-radius: 20px;
             background-color: #e9ecef;
             cursor: pointer;
             font-size: 14px;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
           }
           
           button:hover {
             background-color: #dee2e6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
           }
           
           button.active {
-            background-color: #264653;
+            background: linear-gradient(135deg, #264653 0%, #2a9d8f 100%);
             color: white;
+            box-shadow: 0 4px 8px rgba(42, 157, 143, 0.3);
+          }
+          
+          @media (max-width: 768px) {
+            .filters {
+              justify-content: center;
+            }
+          }
+          
+          @media (max-width: 480px) {
+            h2 {
+              text-align: center;
+            }
+            
+            h2::after {
+              left: 50%;
+              transform: translateX(-50%);
+            }
+            
+            button {
+              padding: 6px 10px;
+              font-size: 13px;
+            }
           }
         </style>
         
@@ -81,6 +119,7 @@ class CampusCategoryFilters extends HTMLElement {
         button.textContent = category
         button.dataset.category = category
   
+        // Marcar el botón "Todas" como activo por defecto
         if (category === "Todas") {
           button.classList.add("active")
         }
@@ -92,14 +131,14 @@ class CampusCategoryFilters extends HTMLElement {
     }
   
     handleCategoryClick(category, clickedButton) {
-
+      // Actualizar la UI: marcar el botón seleccionado
       const buttons = this.shadowRoot.querySelectorAll("button")
       buttons.forEach((button) => {
         button.classList.remove("active")
       })
       clickedButton.classList.add("active")
   
-      
+
       this.dispatchEvent(
         new CustomEvent("campus:category-change", {
           detail: { category },
@@ -109,7 +148,7 @@ class CampusCategoryFilters extends HTMLElement {
       )
     }
   
-  
+
     updateActiveCategory(category) {
       const buttons = this.shadowRoot.querySelectorAll("button")
       buttons.forEach((button) => {
